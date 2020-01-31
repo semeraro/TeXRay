@@ -38,7 +38,7 @@ def has_module(mod_name=None):
         def wrapper_modcheck(*args,**kwargs):
             print(f'mod_name is {mod_name}')
             print(f'dir -> {dir()}')
-            print(f'locals -> {tryit.locals()}')
+            print(f'locals -> {locals()}')
             print(f'yourmama =============')
             if (mod_name in sys.modules) and (mod_name in dir()):
                 location = os.getcwd()

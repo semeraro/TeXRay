@@ -16,59 +16,41 @@ numpyloc = os.path.join(os.path.expanduser("~"),".pve/pyGVT/lib/python3.6/site-p
 sys.path.insert(0,numpyloc)
 sys.path.insert(0,gvtloc)
 from functools import wraps
-import decorators
-#from decorators import debug
-#from decorators import has_module
-def has_gvt(func):
+def can_use_gvt(func):
     @wraps(func)
     def wrapper(*args,**kwargs):
         obj = args[0]
-        #obj._hasgvt = True
         try:
             import gvt
         except ImportError as ex:
             obj._hasgvt = False
-            #print(ex)
+            obj.gvt = None
         except ValueError as ex:
             obj._hasgvt = False
-            #print(ex)
+            obj.gvt = None
         else:
             obj._hasgvt = True
+            obj.gvt = __import__('gvt')
         return func(*args,**kwargs)
     return wrapper
 
-@decorators.debug
-def make_greeting(name,age=None):
-    if age is None:
-        return f"Howdy {name}!"
-    else:
-        return f"Howdy {name} you are {age}"
-
-@decorators.has_module(mod_name='os')
-def im_in():
-    return f'module os loaded'
-
 class Some:
-    @decorators.debug
+    @can_use_gvt
     def __init__(self,max_num):
         self.max_num = max_num
+#        if self._hasgvt:
+#            self.gvt = __import__('gvt')
 
-    @decorators.debug
     def get_some(self):
         return(self.max_num)
-    @has_gvt
+
     def render(self):
+        if self._hasgvt:
+            print(f'I can use gvt plugin')
+            self.gvt.gvtInit()
+        else:
+            print(f'No gvt- bummer')
         return(self._hasgvt)
 
-#def main():
-#    make_greeting("dave")
-#    make_greeting("dave",age=61)
-#im_in()
-#print(f'tryit locals -> {locals()}')
 A = Some(10)
 print(f' A has gvt {A.render()}')
-    #B = Some(30)
-    #print(f"A has {A.get_some()} things B has {B.get_some()} things")
-
-#if __name__ == "__main__":
-#    main()
