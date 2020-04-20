@@ -41,7 +41,7 @@ class ray_group:
         self._rays.extend(rays)
 
     @property
-    def rays():
+    def rays(self):
         return self._rays
 
     
