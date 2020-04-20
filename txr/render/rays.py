@@ -44,4 +44,19 @@ class ray_group:
     def rays(self):
         return self._rays
 
+class ray_generator:
+    """
+    This class generates rays given origin data and direction data
+
+    The class returns a ray_group. The input origin can be any iterable 
+    object that returns x,y,z tuples. The same goes for direction.
+
+    """
+    def __init__(self,origin,direction):
+        #the number of rays in the group is the number of origins
+        numrays = len(origin)
+        
+        print(f'{numrays}')
+        for item in origin:
+            print(f'{item}')
     
