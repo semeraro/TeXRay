@@ -1,2 +1,2 @@
-notebooks/.ipynb_checkpoints/PythonImageTest-checkpoint.ipynb
-notebooks/.ipnnb_checkpoints
+notebooks/.ipynb_checkpoints/
+__pycache__/
