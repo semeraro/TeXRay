@@ -5,7 +5,7 @@ from numpy import ndarray,finfo,iinfo,zeros,array,zeros_like
 class ray:
     """ a ray class that uses numpy"""
     def __init__(self, origin,direction):
-        self._tmin = finfo('float32').min
+        self._tmin = finfo('float32').tiny
         self._tmax = finfo('float32').max
         self._t = self._tmin
         self._payload = zeros_like(origin,dtype='float32')
@@ -21,20 +21,60 @@ class ray:
     @property
     def direction(self):
         return self._direction
+    @property
+    def t(self):
+        return self._t
 
 class ray_group:
     """ 
     a group of rays 
     
     The data is stored in a numpy array with numrays rows and enough
-    columns to store the ray data"""
+    columns to store the ray data
+    
+    ...
+
+    Attributes
+    ----------
+    rays : numpy array
+        A numpy array containing all the rays in this broup
+    
+    Methods
+    -------
+    insert_ray(ray) : Appends ray to array
+
+    add_rays(rays) : Appends a bunch of rays to the numpy array.
+
+    """
+
     def __init__(self,numrays = None):
+        """ 
+        Parameters
+        ----------
+        numrays : The number of rays to allocate in this group
+
+        """
+
         if numrays is None:
             self._rays = None
         else:
             self._rays = zeros((numrays,12),dtype='float32')
+        self._current_position = 0
 
-    def add_ray(self,ray):
+    def insert_ray(self,ray,position=0):
+        """ Add a ray to the group.
+
+        Inserts a ray in the current position of the array. Overwrites the
+        data in that position with the data in ray. Insert into position if 
+        given. Advances current position counter by one. Sets current position
+        counter to position + 1 if position given. 
+        
+        Parameters
+        ----------
+        ray : A txr.rays.ray object 
+        position : row number of the numpy array to insert data into
+        """
+
         self._rays.append(ray)
 
     def add_rays(self,rays):
