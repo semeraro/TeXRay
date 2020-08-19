@@ -11,4 +11,4 @@ print(f'{r1.t}')
 origin =[(0.,0.,0.),(0.,0.,1.)]
 direction =[(1.,0.,0.),(1.,1.,1.5)]
 rays.ray_generator(origin,direction)
-help(rays.ray_group)
+help(rays.ray_group) 
