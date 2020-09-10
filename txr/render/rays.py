@@ -89,11 +89,12 @@ class ray_group:
         Parameters
         ----------
         numrays : The number of rays to allocate in this group
+            If numrays is None then an empty ray group results.
 
         """
 
         if numrays is None:
-            self._rays = None
+            self._rays = empty((1,12),dtype='float32')
         else:
             self._rays = zeros((numrays,12),dtype='float32')
         self._current_position = 0
