@@ -62,7 +62,7 @@ class ray:
     def payload(self):
         return self._data[9:12]
     @property
-    def alldata(self):
+    def raydata(self):
         return self._data[:]
 
 class ray_group:
@@ -132,7 +132,7 @@ class ray_group:
             will be overwritten.
         """
 
-        self._rays[position,:] = ray.alldata
+        self._rays[position,:] = ray.raydata
 
     def add_rays(self,rays):
         self._rays.extend(rays)
