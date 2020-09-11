@@ -1,6 +1,6 @@
 """module with ray related stuff in it"""
 #import numpy as np
-from numpy import ndarray,finfo,iinfo,zeros,array,zeros_like
+from numpy import ndarray,finfo,iinfo,zeros,array,zeros_like,empty
 import copy
 #
 class ray:
@@ -61,6 +61,9 @@ class ray:
     @property
     def payload(self):
         return self._data[9:12]
+    @property
+    def alldata(self):
+        return self._data[:]
 
 class ray_group:
     """ 
@@ -98,6 +101,7 @@ class ray_group:
         else:
             self._rays = zeros((numrays,12),dtype='float32')
         self._current_position = 0
+        print(f'ray_group rays.shape {self._rays.shape}')
 
     def insert_ray(self,ray,position=0):
         """ Add a ray to the group.
@@ -114,6 +118,21 @@ class ray_group:
         """
 
         self._rays.append(ray)
+
+    def set_ray(self,ray,position):
+        """ Overwrite the values of the ray 
+        
+        Overwrite the ray data in position given 
+        with the new values in ray. 
+
+        Parameters
+        ----------
+        ray : A txr.rays.ray object
+        position : The row of the ray group that
+            will be overwritten.
+        """
+
+        self._rays[position,:] = ray.alldata
 
     def add_rays(self,rays):
         self._rays.extend(rays)
