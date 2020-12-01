@@ -59,7 +59,7 @@ class ray:
         return self._data[0:3]
     @origin.setter
     def origin(self,value):
-        self.data[0:3]=value[:]
+        self._data[0:3]=value[:]
     @property
     def direction(self):
         return self._data[3:6]
@@ -128,15 +128,13 @@ class ray_group:
     def insert_ray(self,ray):
         """ Add a ray to the group.
 
-        Inserts a ray in the current position of the array. Overwrites the
-        data in that position with the data in ray. Insert into position if 
-        given. Advances current position counter by one. Sets current position
-        counter to position + 1 if position given. 
+        Adds data from ray to the rays array by appending the data
+        as another row at the bottom of the array. 
         
         Parameters
         ----------
         ray : A txr.rays.ray object 
-        position : row number of the numpy array to insert data into
+
         """
         tmp = ray.raydata.reshape((1,12))
         self._rays = append(self._rays,tmp,axis=0)
@@ -157,7 +155,16 @@ class ray_group:
         self._rays[position,:] = ray.raydata
 
     def add_rays(self,rays):
-        self._rays.extend(rays)
+        """ Add several rays to the group
+
+        Adds data from a set of rays to the rays array in this group
+
+        Parameters
+        ----------
+        rays: a numpy array of shape n,12 that contains the data for n rays
+        """
+
+        self._rays = append(self._rays,rays,axis=0)
 
     @property
     def rays(self):
