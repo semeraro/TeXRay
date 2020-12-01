@@ -125,9 +125,10 @@ class ray_group:
         position : row number of the numpy array to insert data into
         """
         # create a two dimensional array using the ray object
-        print(type(ray))
-        #R = append(self._rays,tmp,axis=0)
-        #self._rays = copy.deepcopy(R) 
+        #print(type(ray))
+        tmp = ray.raydata.reshape((1,12))
+        R = append(self._rays,tmp,axis=0)
+        self._rays = copy.deepcopy(R) 
 
     def set_ray(self,ray,position):
         """ Overwrite the values of the ray 
