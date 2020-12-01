@@ -2,6 +2,7 @@
 #import numpy as np
 from numpy import ndarray,finfo,iinfo,zeros,array,zeros_like,empty
 import copy
+import math
 #
 class ray:
     """ 
@@ -34,6 +35,8 @@ class ray:
     pt_at_t(t) : returns the point on the ray a distance t from the origin
         changes the current value of t in the vector.
 
+    normalize(): makes the direction of this ray a unit vector
+
     """
     def __init__(self, origin,direction):
         self._data = zeros(12)
@@ -46,6 +49,11 @@ class ray:
         if t is not None:
             self._data[6] = t 
         return self._data[0:3] + self._data[6]*self._data[3:6]
+    def normalize(self):
+        len = math.sqrt(self._data[3]**2+self._data[4]**2+self._data[5]**2)
+        # stick an assert in here to catch zero division
+        assert len > 0.0 , "ray normalization failed"
+        self._data[3:6] = self._data[3:6]/len 
     @property
     def origin(self):
         return self._data[0:3]
