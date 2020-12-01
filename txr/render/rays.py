@@ -1,6 +1,6 @@
 """module with ray related stuff in it"""
 #import numpy as np
-from numpy import ndarray,finfo,iinfo,zeros,array,zeros_like,empty
+from numpy import ndarray,finfo,iinfo,zeros,array,zeros_like,empty,append
 import copy
 import math
 #
@@ -111,7 +111,7 @@ class ray_group:
         self._current_position = 0
         print(f'ray_group rays.shape {self._rays.shape}')
 
-    def insert_ray(self,ray,position=0):
+    def insert_ray(self,ray):
         """ Add a ray to the group.
 
         Inserts a ray in the current position of the array. Overwrites the
@@ -124,8 +124,10 @@ class ray_group:
         ray : A txr.rays.ray object 
         position : row number of the numpy array to insert data into
         """
-
-        self._rays.append(ray)
+        # create a two dimensional array using the ray object
+        print(type(ray))
+        #R = append(self._rays,tmp,axis=0)
+        #self._rays = copy.deepcopy(R) 
 
     def set_ray(self,ray,position):
         """ Overwrite the values of the ray 
