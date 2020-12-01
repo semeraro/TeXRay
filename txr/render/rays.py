@@ -57,28 +57,42 @@ class ray:
     @property
     def origin(self):
         return self._data[0:3]
-        #return self._origin
+    @origin.setter
+    def origin(self,value):
+        self.data[0:3]=value[:]
     @property
     def direction(self):
         return self._data[3:6]
-        #return self._direction
+    @direction.setter
+    def direction(self,value):
+        self._data[3:6] = value[:]
     @property
     def t(self):
         return self._data[8]
-        #return self._t
+    @t.setter
+    def t(self,value):
+        self._data[8] = value
     @property
     def payload(self):
         return self._data[9:12]
+    @payload.setter
+    def payload(self,value):
+        self._data[9:12] = value[:]
     @property
     def raydata(self):
         return self._data[:]
+    @raydata.setter
+    def raydata(self,value):
+        self._data[:] = value[:]
+
 
 class ray_group:
     """ 
     a group of rays 
     
     The data is stored in a numpy array with numrays rows and enough
-    columns to store the ray data
+    columns to store the ray data. There are no ray objects stored 
+    just the ray data.
     
     ...
 
@@ -124,11 +138,8 @@ class ray_group:
         ray : A txr.rays.ray object 
         position : row number of the numpy array to insert data into
         """
-        # create a two dimensional array using the ray object
-        #print(type(ray))
         tmp = ray.raydata.reshape((1,12))
-        R = append(self._rays,tmp,axis=0)
-        self._rays = copy.deepcopy(R) 
+        self._rays = append(self._rays,tmp,axis=0)
 
     def set_ray(self,ray,position):
         """ Overwrite the values of the ray 
