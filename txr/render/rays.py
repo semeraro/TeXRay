@@ -99,7 +99,7 @@ class ray_group:
     Attributes
     ----------
     rays : numpy array
-        A numpy array containing all the rays in this broup
+        A numpy array containing data for all the rays in this broup
     
     Methods
     -------
@@ -175,13 +175,15 @@ class ray_generator:
     This class generates rays given origin data and direction data
 
     The class returns a ray_group. The input origin can be any iterable 
-    object that returns x,y,z tuples. The same goes for direction.
+    object that returns x,y,z tuples. The same goes for direction. The rays
+    created here have t = tmin and uninitialized payload. 
 
     """
-    def __init__(self,origin,direction):
-        #the number of rays in the group is the number of origins
-        numrays = len(origin)
-        _raygrp = ray_group(numrays=numrays)
+    def __init__(self,origins,directions):
+        #the number of rays in the group is the number of directions
+        # a group can have a single origin
+        numrays = len(directions)
+        self._raygrp = ray_group(numrays=numrays)
         
         print(f'{numrays}')
         #for orig,dir in map(none,origin,direction):
