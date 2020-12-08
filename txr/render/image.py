@@ -30,16 +30,24 @@ class image:
     def height(self):
         return self._height
     def _reverse_height_index(self,key):
+        """ internal method to adjust the row index to count from
+        the bottom of the array instead of the top. This insures the
+        image is indexed from the bottom left corner. 
+        """
         # this reverses the height index value
-        print(key[0].step)
-        print(('no','yes')[key[0].step is None])
-        if isinstance(key[0],slice): # got a slice
-            key0 = slice(self._height - key[0].start -1,\
-                             self._height - key[0].stop  -1,\
-                              (-(key[0].step),None)[key[0].step is None])
-        else:
-            key0 = self._height - key[0] - 1
-        if len(key) < 3:
-            return (key0,key[1])
-        else:
-            return (key0,key[1],key[2])
+        if isinstance(key,int):  # got a single index. 
+            newkey = self._height - key -1 
+            return newkey
+        if isinstance(key,tuple): # we have multiple indices
+            if isinstance(key[0],int):
+                keylist  = list(key)
+                keylist[0] = self._height - key[0] -1
+                newkey = tuple(keylist)
+            elif isinstance(key[0],slice):
+                keylist = list(key)
+                start = self._height - key[0].start -1
+                stop = self._height - key[0].stop -1 
+                step = (key[0].step,-1)[key[0].step is None]
+                keylist[0] = slice(start,stop,step)
+                newkey = tuple(keylist)
+            return newkey
