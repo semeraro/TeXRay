@@ -34,8 +34,7 @@ class image:
         # this reverses the height index value
         if isinstance(key,int):  # got a single index. 
             newkey = self._height - key -1 
-            return newkey
-        if isinstance(key,tuple): # we have multiple indices
+        elif isinstance(key,tuple): # we have multiple indices
             keylist = list(key) # create a mutable object
             if isinstance(keylist[0],int): 
                 # first element is int
@@ -57,4 +56,4 @@ class image:
                     step = -key[0].step
                 keylist[0] = slice(start,stop,step)
                 newkey = tuple(keylist)
-            return newkey
+        return newkey
