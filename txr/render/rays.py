@@ -94,11 +94,12 @@ class ray:
 
 class ray_group:
     """ 
-    a group of rays 
+    data associated with a group of rays 
     
-    The data is stored in a numpy array with numrays rows and enough
-    columns to store the ray data. There are no ray objects stored 
-    just the ray data.
+    This class stored data associated with a collection of rays. The
+    data is stored in a numpy array. The data for one ray constitutes 
+    one row of the data. Ray objects themselves are not stored, only 
+    the data associated with the ray such as origin,direction, etc.
     
     ...
 
@@ -109,7 +110,8 @@ class ray_group:
     
     Methods
     -------
-    insert_ray(ray) : Appends ray to array
+    insert_ray(ray) : Appends ray to array if array is not empty.
+    
 
     add_rays(rays) : Appends a bunch of rays to the numpy array.
 
@@ -130,14 +132,18 @@ class ray_group:
         else:
             self._rays = zeros((numrays,12),dtype='float32')
             self._numrays = numrays
-        self._current_position = 0
-        print(f'ray_group rays.shape {self._rays.shape}')
+    def __getitem__(self,key):
+        return self._rays[key]
+    @property
+    def numrays(self):
+        return self._numrays
 
     def insert_ray(self,ray):
         """ Add a ray to the group.
 
         Adds data from ray to the rays array by appending the data
-        as another row at the bottom of the array. 
+        as another row at the bottom of the array. If the group is
+        empty the ray data is placed in row zero of the array.
         
         Parameters
         ----------
