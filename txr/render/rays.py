@@ -38,13 +38,19 @@ class ray:
     normalize(): makes the direction of this ray a unit vector
 
     """
-    def __init__(self, origin,direction):
-        self._data = zeros(12)
+    def __init__(self, origin,direction,size=12):
+        assert(size > 11,"ray requires 12 elements or more")
+        self._data = zeros(max(size,12))
+        # all rays contain at least the following data.
+        # rays derived from this one may have additional
+        # data.
         self._data[0:3] = origin
         self._data[3:6] = direction 
+        # range of t values
         self._data[6] = finfo('float32').tiny
         self._data[7] = finfo('float32').max
-        self._data[8] = self._data[6]  
+        # initialize t to tiny.
+        self._data[8] = self._data[6] 
     def pt_at_t(self,t=None):
         if t is not None:
             self._data[6] = t 
@@ -120,8 +126,10 @@ class ray_group:
 
         if numrays is None:
             self._rays = empty((1,12),dtype='float32')
+            self._numrays = 0
         else:
             self._rays = zeros((numrays,12),dtype='float32')
+            self._numrays = numrays
         self._current_position = 0
         print(f'ray_group rays.shape {self._rays.shape}')
 
@@ -137,7 +145,11 @@ class ray_group:
 
         """
         tmp = ray.raydata.reshape((1,12))
-        self._rays = append(self._rays,tmp,axis=0)
+        if self._numrays == 0:
+            self.set_ray(ray,0)
+        else:
+            self._rays = append(self._rays,tmp,axis=0)
+        self._numrays += 1
 
     def set_ray(self,ray,position):
         """ Overwrite the values of the ray 
@@ -182,10 +194,36 @@ class ray_generator:
     def __init__(self,origins,directions):
         #the number of rays in the group is the number of directions
         # a group can have a single origin
-        numrays = len(directions)
-        self._raygrp = ray_group(numrays=numrays)
+        self._numrays = len(directions)
+        self._numorigins = len(origins)
+        self._directions = directions
+        self._origins = origins
+        self._singleOrigin=self._numorigins == 1
+        self._raygrp = ray_group()
         
-        print(f'{numrays}')
-        #for orig,dir in map(none,origin,direction):
-        #    print(f'{orig}, {dir}')
-    
+    @property
+    def numrays(self):
+        return self._numrays
+    @property
+    def numorigins(self):
+        return self._numorigins
+    @property
+    def ray_group(self):
+        return self._raygrp
+    def generate(self):
+        # generate the rays here
+        directit = iter(self._directions)
+        if self._singleOrigin:
+            orig = self._origins
+        else:
+            orig = iter(self._origins)
+        while True:
+            try:
+                if self._singleOrigin:
+                    r = ray(orig,next(directit))
+                    self._raygrp.insert_ray(r)
+                else:
+                    r = ray(next(orig),next(directit))
+                    self._raygrp.insert_ray(r)
+            except StopIteration:
+                break

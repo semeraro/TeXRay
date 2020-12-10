@@ -1,6 +1,5 @@
 """Image related code"""
 import numpy as np
-from PIL import Image,ImageOps
 import os
 import sys
 import copy, math
