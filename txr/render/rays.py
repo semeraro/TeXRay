@@ -220,7 +220,7 @@ class ray_generator:
         # generate the rays here
         directit = iter(self._directions)
         if self._singleOrigin:
-            orig = self._origins
+            orig = self._origins[0]
         else:
             orig = iter(self._origins)
         while True:
