@@ -44,8 +44,11 @@ class ray:
         # all rays contain at least the following data.
         # rays derived from this one may have additional
         # data.
-        self._data[0:3] = origin[0:4]
-        self._data[3:6] = direction[0:4]
+        try:
+            self._data[0:3] = origin[0:4]
+            self._data[3:6] = direction[0:4]
+        except IndexError:
+            print(f'Index error in ray constructor')
         # range of t values
         self._data[6] = finfo('float32').tiny
         self._data[7] = finfo('float32').max
@@ -200,12 +203,14 @@ class ray_generator:
     def __init__(self,origins,directions):
         #the number of rays in the group is the number of directions
         # a group can have a single origin
-        self._numrays = len(directions)
+        self._numdirections = len(directions)
         self._numorigins = len(origins)
+        self._numrays = max(self._numorigins,self._numdirections)
         self._directions = directions
         self._origins = origins
         self._singleOrigin=self._numorigins == 1
-        self._raygrp = ray_group()
+        self._singleDirection = self._numdirections == 1
+        self._raygrp = ray_group(numrays=self._numrays)
         
     @property
     def numrays(self):
@@ -217,19 +222,21 @@ class ray_generator:
     def ray_group(self):
         return self._raygrp
     def generate(self):
+        """ Generate Ray data
+        This method assumes that the input origins and directions
+        are iterable objects that produce triples. The number of
+        origins and directions need not agree. 
+
+        """
         # generate the rays here
-        directit = iter(self._directions)
-        if self._singleOrigin:
-            orig = self._origins[0]
-        else:
-            orig = iter(self._origins)
-        while True:
+        for index in range(self._numrays):
             try:
-                if self._singleOrigin:
-                    r = ray(orig,next(directit))
-                    self._raygrp.insert_ray(r)
-                else:
-                    r = ray(next(orig),next(directit))
-                    self._raygrp.insert_ray(r)
-            except StopIteration:
-                break
+                orig = self._origins[index]
+            except IndexError:
+                orig = self._origins[index-1]
+            try: 
+                direct = self._directions[index]
+            except IndexError:
+                direct = self._directions[index-1]
+            r = ray(orig,direct)
+            self._raygrp.set_ray(r,index)
