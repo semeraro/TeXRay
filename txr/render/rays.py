@@ -44,8 +44,8 @@ class ray:
         # all rays contain at least the following data.
         # rays derived from this one may have additional
         # data.
-        self._data[0:3] = origin
-        self._data[3:6] = direction 
+        self._data[0:3] = origin[0:4]
+        self._data[3:6] = direction[0:4]
         # range of t values
         self._data[6] = finfo('float32').tiny
         self._data[7] = finfo('float32').max
