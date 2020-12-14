@@ -12,7 +12,7 @@ import numpy as np
 #
 height = 100
 width = 200
-image.image(height,width)
+myimage = image.image(height,width)
 #
 # now we are going to need some rays
 # we are going to need a list of origins and directions
@@ -66,3 +66,25 @@ def color(r):
     else:
         return((0,0,255))
 #
+# use these functions to trace a group of rays
+# use the image ordering of [row,column] "c" order
+for row in range(height):
+    for column in range(width):
+        index = width*row + column # index into raydata
+        rayGroupData = rayGroup[index]
+        origin = rayGroupData[0:3]
+        direction = rayGroupData[3:6]
+        t = rayGroupData[8]
+        #create new ray object with data from indexed ray
+        r = rays.ray(origin,direction,t)
+        #set payload to color
+        r.payload = color(r)
+        rayGroup[index] = r.raydata
+#
+# copy raygroup data over to the image
+#
+print(rayGroup[:,9:12].reshape((height,width,3)).shape)
+print(myimage[:].shape)
+myimage[:,:] = rayGroup[:,9:12].reshape((height,width,3))
+# display the image
+Image.fromarray(myimage[:,:]).show()

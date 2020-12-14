@@ -38,7 +38,7 @@ class ray:
     normalize(): makes the direction of this ray a unit vector
 
     """
-    def __init__(self, origin,direction,size=12):
+    def __init__(self, origin,direction,t=None,size=12):
         assert(size > 11,"ray requires 12 elements or more")
         self._data = zeros(max(size,12))
         # all rays contain at least the following data.
@@ -53,7 +53,10 @@ class ray:
         self._data[6] = finfo('float32').tiny
         self._data[7] = finfo('float32').max
         # initialize t to tiny.
-        self._data[8] = self._data[6] 
+        if t is None:
+            self._data[8] = self._data[6] 
+        else:
+            self._data[8] = t
     def pt_at_t(self,t=None):
         if t is not None:
             self._data[6] = t 
@@ -137,6 +140,8 @@ class ray_group:
             self._numrays = numrays
     def __getitem__(self,key):
         return self._rays[key]
+    def __setitem__(self,key,value):
+        self._rays[key] = value[:]
     @property
     def numrays(self):
         return self._numrays
