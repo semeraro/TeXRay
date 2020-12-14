@@ -5,7 +5,8 @@ import sys
 import copy, math
 class image:
     """
-    A numpy based image container. The image resides in a numpy array
+    A numpy based image container. The image resides in a
+    numpy array
 
     
     """

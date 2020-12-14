@@ -87,4 +87,6 @@ print(rayGroup[:,9:12].reshape((height,width,3)).shape)
 print(myimage[:].shape)
 myimage[:,:] = rayGroup[:,9:12].reshape((height,width,3))
 # display the image
-Image.fromarray(myimage[:,:]).show()
+pilimage = Image.fromarray(myimage[:,:])
+pilimage.show()
+pilimage.save("Images/redeye.png","PNG")
