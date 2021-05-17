@@ -5,7 +5,7 @@ The repo contains utility code that is not specifically related to ray tracing b
 of third party libs when it is not necessary. However sometimes it is just easier or necessary to utilize what is available. For example, IO with hdf is just so convenient that it is hard not to utilize it. 
 ### Vectors and Math 
 Every ray tracing code uses some sort of vector class with accompanying matrix multiplication (transform) class. This code is generic and can be used for many other graphics purposes. I could use the glm code for this and I will support that option but I like to reduce the amount of thirdparty depennds. Vector code is very easy to write and having it in the source tree makes it easy to examine to  see how it
-works. As a first pass we are using numbpy for this. 
+works. As a first pass we are using numbpy. 
 ### Data Import
 Gotta read the data. There are some data reading bits here. Some are written by me and others are third party. Reading obj for example
 is supported by multiple sources of reader. 
