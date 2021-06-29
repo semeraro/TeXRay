@@ -10,8 +10,9 @@ import numpy as np
 #
 # Going to need an image
 #
-height = 100
-width = 200
+height = 768
+width = 1024
+aspect = width/height
 myimage = image.image(height,width)
 #
 # now we are going to need some rays
@@ -24,15 +25,18 @@ directions = []
 # set the up direction to be positive y, right to be positive x
 # and set the view direction to be the negative z direction. 
 # 
-up = np.array((0.,1.,0.),dtype=np.float)
-eye = np.array((0.,0.,0.),dtype=np.float)
+up = np.array((0.,1.,0.),dtype=float)
+eye = np.array((0.,0.,0.),dtype=float)
 #
 # now we need a viewport which we place at z = -1
-# 
-lower_left = np.array((-2.0,-1.0,-1.0))
+# viewport var contains width and height of 
+# the window. Make it of height 2.0 and width 
+# aspect * 2.0
+viewport = 2.0*np.array((aspect,1.0))
 # direction vectors left-right down-up
-horiz = np.array((4.0,0.,0.))
-vert = np.array((0.,2.,0.))
+horiz = np.array((viewport[0],0.,0.))
+vert = np.array((0.,viewport[1],0.))
+lower_left = np.array((-viewport[0]/2.0,-viewport[1]/2.0,-1.0))
 # set the origins and directions so we can use them to generate ray data
 for i in range(height):
     for j in range(width):
@@ -89,4 +93,4 @@ myimage[:,:] = rayGroup[:,9:12].reshape((height,width,3))
 # display the image
 pilimage = Image.fromarray(myimage[:,:])
 pilimage.show()
-pilimage.save("Images/redeye.png","PNG")
+#pilimage.save("Images/redeye.png","PNG")
