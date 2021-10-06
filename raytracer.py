@@ -23,7 +23,7 @@ directions = []
 #
 # set our view point to be the origin of the global coordinates
 # set the up direction to be positive y, right to be positive x
-# and set the view direction to be the negative z direction. 
+# and set the view  direction to be the negative z direction. 
 # 
 up = np.array((0.,1.,0.),dtype=float)
 eye = np.array((0.,0.,0.),dtype=float)
